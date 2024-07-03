@@ -1,10 +1,7 @@
 package id.dojo;
 
 import id.dojo.model.Points;
-import id.dojo.things.Board;
-import id.dojo.things.Cell;
-import id.dojo.things.Snake;
-import id.dojo.things.Wall;
+import id.dojo.things.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,12 +12,14 @@ public class Game {
     private List<Wall> walls;
     private Snake snake;
     private int speed;
+    private final Fruit fruit;
 
     public Game(Builder build) {
         this.board = build.board;
         this.walls = build.walls;
         this.speed = build.speed;
         this.snake = build.snake;
+        this.fruit = build.fruit;
     }
 
     public Board getBoard() {
@@ -30,8 +29,8 @@ public class Game {
     public void render() throws InterruptedException, IOException {
         while (true){
             board.displayBoard();
-            snake.stepForward(board);
-            Thread.sleep(300);
+            snake.stepForward(fruit,board);
+            Thread.sleep(100); // for speed
             new ProcessBuilder("clear").inheritIO().start().waitFor();
         }
     }
@@ -46,6 +45,7 @@ public class Game {
         Board board;
         List<Wall> walls;
         Snake snake;
+        Fruit fruit;
         int speed;
 
         public Builder createBoard(int rows, int columns) {
@@ -74,7 +74,16 @@ public class Game {
             return this;
         }
 
-        //dipakai untuk membuat objek ular dan buah
+        public Builder createFruit(Fruit fruit) {
+            this.fruit = fruit;
+            return this;
+        }
+
+        public Builder generateFruit() {
+            board.putObject(fruit.getPosition(), fruit);
+            return this;
+        }
+
         public Builder generatePopulation(){
             board.putObject(snake.getHead(), snake);
             return this;

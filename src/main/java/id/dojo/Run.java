@@ -1,5 +1,6 @@
 package id.dojo;
 
+import id.dojo.things.Fruit;
 import id.dojo.things.Snake;
 
 public class Run {
@@ -22,20 +23,19 @@ public class Run {
 
     public static native void controls();
 
-    // UATARA ATAU ATAS
     public static void controlUp(){
         snake.turnUp(game.getBoard());
     }
-    // SELATAN ATAU BAWAH
+
     public static void controlDown(){
         snake.turnDown(game.getBoard());
     }
-    // TIMUR ATAU KIRI
+
     public static void controlLeft(){
         snake.turnLeft(game.getBoard());
 
     }
-    // BARAT ATAU KANAN
+
     public static void controlRight(){
         snake.turnRight(game.getBoard());
 
@@ -58,11 +58,19 @@ public class Run {
                 .build();
         snake.generateBody();
 
+        Fruit fruit = Fruit.getBuilder()
+                .setName("Buah")
+                .setAppearance(" o")
+                .setPosition(5, 5)
+                .build();
+
         game = Game.getBuilder()
                 .createBoard(row, col)
                 .createWall()
+                .createFruit(fruit)
                 .createSnake(snake)
                 .generatePopulation()
+                .generateFruit()
                 .build();
 
 
